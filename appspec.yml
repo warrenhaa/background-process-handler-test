@@ -1,0 +1,42 @@
+version: 0.0
+os: linux
+files:
+   - source: /
+     destination: /tmp/deploy/
+     
+permissions:
+  - object: /tmp/deploy/deploy/
+    pattern: "*.sh"
+    owner: root
+    group: root
+    mode: 755
+    type:
+        - file 
+  - object: /home/ec2-user/device-status-updater/
+    pattern: "**"
+    owner: root
+    group: root
+    mode: 755
+    type:
+        - directory
+hooks:
+   BeforeInstall:
+    - location: deploy/beforeinstall.sh
+      timeout: 300
+      runas: root
+   ApplicationStop:
+    - location: deploy/applicationstop.sh
+      timeout: 300
+      runas: root
+   AfterInstall:
+    - location: deploy/install.sh
+      timeout: 900
+      runas: root
+   ApplicationStart:
+    - location: deploy/applicationstart.sh
+      timeout: 300
+      runas: root
+   ValidateService:
+    - location: deploy/validate.sh
+      timeout: 300
+      runas: root

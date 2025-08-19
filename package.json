@@ -1,0 +1,43 @@
+{
+  "name": "device-status-updater",
+  "version": "0.43.1",
+  "description": "update device data",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node app.js"
+  },
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.29",
+    "amazon-cognito-identity-js": "^5.2.8",
+    "aws-sdk": "^2.909.0",
+    "axios": "^1.6.5",
+    "core-js": "^3.37.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.5.0",
+    "google-libphonenumber": "^3.2.31",
+    "ioredis": "^4.27.2",
+    "json-diff": "^0.7.1",
+    "json5": "^2.2.3",
+    "lodash": "^4.17.21",
+    "mjml": "^4.10.1",
+    "mudder": "^1.1.1",
+    "mustache": "^4.2.0",
+    "node-rules": "^7.1.0",
+    "nodemailer": "^6.6.2",
+    "pg": "^8.6.0",
+    "pg-promise": "^10.15.4",
+    "rate-limiter-flexible": "^7.1.0",
+    "sequelize": "^6.29.0",
+    "sequelize-cli": "^6.2.0",
+    "sqs-consumer": "^5.5.0",
+    "sqs-producer": "^2.1.0",
+    "twilio": "^5.2.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}
