@@ -32,7 +32,7 @@ async function consumeMessages() {
     // 4. Consume Messages
     channel.consume(RABBITMQ_QUEUE, async (message) => {
         if (paused) {
-            console.log("RABBITMQ Rate limit hit, added back to queue", message.Body)
+            console.log("RABBITMQ Rate limit hit, added back to queue", message)
             throw new Error('RABBITMQ Rate limit exceeded');
         }
         try {
@@ -43,7 +43,7 @@ async function consumeMessages() {
                 retryInMs: rejRes.msBeforeNext
             })
             if (!paused) {
-                console.log("RABBITMQ Rate limit hit,pause the consumption",instanceId, message.Body)
+                console.log("RABBITMQ Rate limit hit,pause the consumption",instanceId, message)
                 paused = true;
                 const now = Date.now();
                 const msPassed = now % 1000;
@@ -56,16 +56,16 @@ async function consumeMessages() {
                         console.log("LimiterLog",instanceId,"SQS Consumption Started")
                     });
                 }, msRemaining);
-                console.log("RABBITMQ Rate limit exceeded", message.Body)
+                console.log("RABBITMQ Rate limit exceeded", message)
                 throw new Error('RABBITMQ Rate limit exceeded');
             } else {
-                console.log("RABBITMQ Rate limit hit, added back to queue", message.Body)
+                console.log("RABBITMQ Rate limit hit, added back to queue", message)
                 throw new Error('Rate limit exceeded');
             }
         }
         if (!paused) {
         console.log("RABBITMQ processed event")
-        let obj = JSON.parse(message.Body)
+        let obj = JSON.parse(message)
         manageDeviceUpdateAccepted(obj).then(result => {
 
         }).catch(async err => {
