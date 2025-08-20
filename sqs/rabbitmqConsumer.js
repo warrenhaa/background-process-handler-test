@@ -33,7 +33,9 @@ async function consumeMessages() {
     channel.consume(RABBITMQ_QUEUE, async (message) => {
         iotmsg = message.content.toString();
         if (paused) {
-            console.log("RABBITMQ Rate limit hit, added back to queue", iotmsg)
+            setTimeout(() => {
+                console.log("RABBITMQ Rate limit hit, added back to queue")
+            }, 3);
             return
         }
         try {
