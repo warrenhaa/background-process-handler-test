@@ -57,7 +57,7 @@ async function consumeMessages() {
                         console.log("LimiterLog",instanceId,"SQS Consumption Started:"+msRemaining)
                     });
                 }, msRemaining);
-                console.log("RABBITMQ Rate limit exceeded")
+                consumeMessages
                 return
             } else {
                 console.log("RABBITMQ Rate limit hit, added back to queue")
