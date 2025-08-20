@@ -121,7 +121,7 @@ app.on('timeout_error', (err) => {
 });
 
 var startConsumer = function () {
-    app.start();
+    //app.start();
 }
 
 

@@ -31,18 +31,18 @@ async function consumeMessages() {
     // 4. Consume Messages
     channel.consume(RABBITMQ_QUEUE, async (message) => {
         if (paused) {
-            console.log("Rate limit hit, added back to queue", message.Body)
-            throw new Error('Rate limit exceeded');
+            console.log("RABBITMQ Rate limit hit, added back to queue", message.Body)
+            throw new Error('RABBITMQ Rate limit exceeded');
         }
         try {
             await rateLimiter.consume(`update_acccepted-sqs-${instanceId}`);
         } catch (rejRes) {
-             console.log("Rate limit hit", {
+             console.log("RABBITMQ Rate limit hit", {
                 instance: instanceId,
                 retryInMs: rejRes.msBeforeNext
             })
             if (!paused) {
-                console.log("Rate limit hit,pause the consumption",instanceId, message.Body)
+                console.log("RABBITMQ Rate limit hit,pause the consumption",instanceId, message.Body)
                 paused = true;
                 const now = Date.now();
                 const msPassed = now % 1000;
@@ -57,10 +57,10 @@ async function consumeMessages() {
                         app.start();
                     });
                 }, msRemaining);
-                console.log("Rate limit exceeded", message.Body)
-                throw new Error('Rate limit exceeded');
+                console.log("RABBITMQ Rate limit exceeded", message.Body)
+                throw new Error('RABBITMQ Rate limit exceeded');
             } else {
-                console.log("Rate limit hit, added back to queue", message.Body)
+                console.log("RABBITMQ Rate limit hit, added back to queue", message.Body)
                 throw new Error('Rate limit exceeded');
             }
         }
@@ -72,21 +72,6 @@ async function consumeMessages() {
         }).catch(async err => {
             if (err && err.message) {
                 Logger.error("Error", { "stack": err.stack, "msg": err.message });
-                var company_code = process.env.COMPANY_CODE;
-                var params = {};
-                var jsonError = { "stack": err?.stack || null, "obj": obj, "Error": err }
-                params["search"] = err?.message || "DeviceStatusUpdaterError";
-                params["title"] = err?.message || "DeviceStatusUpdaterError";
-                params["labels"] = [company_code];
-                params["description"] = '```json' + JSON.stringify(jsonError, null, 2) + '```'
-                const issueExists = await getIssue(params).catch(err => {
-                    console.log("Error- DeviceUpdateAcceptedConsumer CreateIssue Error", err);
-                })
-                if (issueExists == false || issueExists == 'false') {
-                    await createIssue(params).catch(err => {
-                        console.log("Error- DeviceUpdateAcceptedConsumer CreateIssue Error", err);
-                    })
-                }
             }
         })}
     }, {
@@ -112,7 +97,7 @@ async function consumeMessages() {
     });
 
   } catch (error) {
-    console.error('Failed to connect to RabbitMQ:', error);
+    console.error('RABBITMQ Failed to connect to RabbitMQ:', error);
   }
 }
 
