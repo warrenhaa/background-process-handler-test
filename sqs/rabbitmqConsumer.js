@@ -34,7 +34,7 @@ async function consumeMessages() {
         iotmsg = message.content.toString();
         if (paused) {
             console.log("RABBITMQ Rate limit hit, added back to queue", iotmsg)
-            throw new Error('RABBITMQ Rate limit exceeded');
+            return
         }
         try {
             await rateLimiter.consume(`update_acccepted-sqs-${instanceId}`);
@@ -58,16 +58,17 @@ async function consumeMessages() {
                     });
                 }, msRemaining);
                 console.log("RABBITMQ Rate limit exceeded", iotmsg)
-                throw new Error('RABBITMQ Rate limit exceeded');
+                return
             } else {
                 console.log("RABBITMQ Rate limit hit, added back to queue", iotmsg)
-                throw new Error('Rate limit exceeded');
+                return
             }
         }
         if (!paused) {
         console.log("RABBITMQ processed event:"+iotmsg)
         let obj = JSON.parse(iotmsg)
         manageDeviceUpdateAccepted(obj).then(result => {
+            console.log("RABBITMQ manageDeviceUpdateAccepted finish:"+iotmsg)
             channel.ack(message);
         }).catch(async err => {
             if (err && err.message) {
