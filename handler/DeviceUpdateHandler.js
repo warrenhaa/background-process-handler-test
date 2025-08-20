@@ -1945,6 +1945,7 @@ function enableRuleGroup(key, device_code, company_id) {
 }
 
 function manageDeviceUpdateAccepted(obj) {
+    console.log("RABBITMQ manageDeviceUpdateAccepted start")
     return new Promise(async (resolve, reject) => {
         var alertMessageKey = Object.keys(obj).filter((name) => name.endsWith("AlertMessage"));
         var actionValueKey = Object.keys(obj).filter((name) => name.endsWith(":ActionValue"));
@@ -1964,6 +1965,7 @@ function manageDeviceUpdateAccepted(obj) {
         let longitude = obj.cloud_metadata_longitude;
         var deviceCode = obj.topic_name;
         var model = obj.model;
+        console.log("RABBITMQ manageDeviceUpdateAccepted model:"+model)
         const splitArr = deviceCode.split('-');
         const devicesData = {};
 

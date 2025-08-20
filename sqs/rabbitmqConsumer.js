@@ -57,10 +57,10 @@ async function consumeMessages() {
                         console.log("LimiterLog",instanceId,"SQS Consumption Started")
                     });
                 }, msRemaining);
-                console.log("RABBITMQ Rate limit exceeded", iotmsg)
+                console.log("RABBITMQ Rate limit exceeded")
                 return
             } else {
-                console.log("RABBITMQ Rate limit hit, added back to queue", iotmsg)
+                console.log("RABBITMQ Rate limit hit, added back to queue")
                 return
             }
         }
@@ -72,7 +72,7 @@ async function consumeMessages() {
             channel.ack(message);
         }).catch(async err => {
             if (err && err.message) {
-                Logger.error("Error", { "stack": err.stack, "msg": err.message });
+                console.log("RABBITMQ process error:"+err.message)
             }
         })}
     }, {
@@ -86,7 +86,7 @@ async function consumeMessages() {
 
     // Handle Errors (Important)
     connection.on('error', (err) => {
-      console.error('RabbitMQ connection error:', err);
+      console.error('RabbitMQ connection error:');
       consumeMessages();
     });
 
