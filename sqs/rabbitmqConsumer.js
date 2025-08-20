@@ -100,6 +100,22 @@ async function consumeMessages() {
     console.error('RABBITMQ Failed to connect to RabbitMQ:', error);
   }
 }
+app.on('error', (err) => {
+    //console.error(err.message);
+    Logger.error("Error ", { "stack": err.stack, "msg": err.message })
+    startConsumer()
+});
+
+app.on('processing_error', (err) => {
+    //console.error(err.message);
+    Logger.error("Processing-Error ", { "stack": err.stack, "msg": err.message })
+});
+
+app.on('timeout_error', (err) => {
+    //console.error(err.message);
+    Logger.error("Timeout-Error ", { "stack": err.stack, "msg": err.message })
+    startConsumer()
+});
 var startConsumer = function () {
     consumeMessages();
 }
