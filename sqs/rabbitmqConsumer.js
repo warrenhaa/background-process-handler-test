@@ -31,8 +31,9 @@ async function consumeMessages() {
 
     // 4. Consume Messages
     channel.consume(RABBITMQ_QUEUE, async (message) => {
+        iotmsg = message.content.toString();
         if (paused) {
-            console.log("RABBITMQ Rate limit hit, added back to queue", message)
+            console.log("RABBITMQ Rate limit hit, added back to queue", iotmsg)
             throw new Error('RABBITMQ Rate limit exceeded');
         }
         try {
@@ -43,7 +44,7 @@ async function consumeMessages() {
                 retryInMs: rejRes.msBeforeNext
             })
             if (!paused) {
-                console.log("RABBITMQ Rate limit hit,pause the consumption",instanceId, message)
+                console.log("RABBITMQ Rate limit hit,pause the consumption",instanceId, iotmsg)
                 paused = true;
                 const now = Date.now();
                 const msPassed = now % 1000;
@@ -56,18 +57,18 @@ async function consumeMessages() {
                         console.log("LimiterLog",instanceId,"SQS Consumption Started")
                     });
                 }, msRemaining);
-                console.log("RABBITMQ Rate limit exceeded", message)
+                console.log("RABBITMQ Rate limit exceeded", iotmsg)
                 throw new Error('RABBITMQ Rate limit exceeded');
             } else {
-                console.log("RABBITMQ Rate limit hit, added back to queue", message)
+                console.log("RABBITMQ Rate limit hit, added back to queue", iotmsg)
                 throw new Error('Rate limit exceeded');
             }
         }
         if (!paused) {
-        console.log("RABBITMQ processed event:"+message)
-        let obj = JSON.parse(message)
+        console.log("RABBITMQ processed event:"+iotmsg)
+        let obj = JSON.parse(iotmsg)
         manageDeviceUpdateAccepted(obj).then(result => {
-
+            channel.ack(message);
         }).catch(async err => {
             if (err && err.message) {
                 Logger.error("Error", { "stack": err.stack, "msg": err.message });
