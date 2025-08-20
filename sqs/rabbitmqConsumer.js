@@ -100,5 +100,10 @@ async function consumeMessages() {
     console.error('RABBITMQ Failed to connect to RabbitMQ:', error);
   }
 }
+var startConsumer = function () {
+    consumeMessages();
+}
 
-consumeMessages();
+module.exports = {
+    startConsumer
+}
