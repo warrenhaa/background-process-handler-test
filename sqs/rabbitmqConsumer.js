@@ -1,7 +1,8 @@
 const amqp = require('amqplib');
 const { RateLimiterRedis } = require("rate-limiter-flexible");
 const redisClient = require("../cache/redisClient");
-
+const os = require('os'); 
+const instanceId = os.hostname(); 
 // RabbitMQ connection parameters (adjust as needed)
 const RABBITMQ_HOST = 'amqp://warrenxia:xia123@ec2-63-179-63-183.eu-central-1.compute.amazonaws.com'; // or amqp://user:pass@host/vhost
 const RABBITMQ_QUEUE = 'SQSUpdateAccepted';
