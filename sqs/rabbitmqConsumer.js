@@ -48,13 +48,11 @@ async function consumeMessages() {
                 const msPassed = now % 1000;
                 // const msRemaining = (parseInt(process.env.ACTIVITY_LOG_QUEUE_RATELIMIT_DURATION)*1000) - msPassed;
                 const msRemaining = rejRes.msBeforeNext || (parseInt(process.env.DEVICE_UPDATE_ACCEPTECTED_TOPIC_QUEUE_RATELIMIT_DURATION)*1000);
-                app.stop();
                 console.log("LimiterLog",instanceId,"SQS Consumption Stopped","Will start after",msRemaining)
                 setTimeout(() => {
                     paused = false;
                     setImmediate(() => {
                         console.log("LimiterLog",instanceId,"SQS Consumption Started")
-                        app.start();
                     });
                 }, msRemaining);
                 console.log("RABBITMQ Rate limit exceeded", message.Body)
@@ -81,13 +79,11 @@ async function consumeMessages() {
     // Handle Connection Closure (Important)
     connection.on('close', () => {
       console.error('Connection to RabbitMQ closed.');
-      process.exit(1); // Or attempt to reconnect
     });
 
     // Handle Errors (Important)
     connection.on('error', (err) => {
       console.error('RabbitMQ connection error:', err);
-      process.exit(1); // Or attempt to reconnect
     });
 
     process.on('beforeExit', async () => {
@@ -100,22 +96,7 @@ async function consumeMessages() {
     console.error('RABBITMQ Failed to connect to RabbitMQ:', error);
   }
 }
-app.on('error', (err) => {
-    //console.error(err.message);
-    Logger.error("Error ", { "stack": err.stack, "msg": err.message })
-    startConsumer()
-});
 
-app.on('processing_error', (err) => {
-    //console.error(err.message);
-    Logger.error("Processing-Error ", { "stack": err.stack, "msg": err.message })
-});
-
-app.on('timeout_error', (err) => {
-    //console.error(err.message);
-    Logger.error("Timeout-Error ", { "stack": err.stack, "msg": err.message })
-    startConsumer()
-});
 var startConsumer = function () {
     consumeMessages();
 }
