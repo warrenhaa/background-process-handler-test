@@ -64,7 +64,7 @@ async function consumeMessages() {
             }
         }
         if (!paused) {
-        console.log("RABBITMQ processed event")
+        console.log("RABBITMQ processed event:"+message)
         let obj = JSON.parse(message)
         manageDeviceUpdateAccepted(obj).then(result => {
 

@@ -3,8 +3,8 @@
   "version": "0.43.1",
   "description": "update device data",
   "scripts": {
-    "start": "node app.js",
-    "test": "node app.js"
+    "start": "node --max-old-space-size=1200 app.js",
+    "test": "node --max-old-space-size=1200 app.js"
   },
   "dependencies": {
     "amqplib": "^0.10.0",
