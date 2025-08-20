@@ -85,6 +85,7 @@ async function consumeMessages() {
     // Handle Errors (Important)
     connection.on('error', (err) => {
       console.error('RabbitMQ connection error:', err);
+      consumeMessages();
     });
 
     process.on('beforeExit', async () => {
