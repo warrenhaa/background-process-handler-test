@@ -12,7 +12,9 @@ const notificationQueueConsumer = require('./sqs/NotificationQueueConsumer')
 const activityLogQueueConsumer = require('./sqs/ActivityLogQueueConsumer')
 const deviceDataConsumer = require('./sqs/DeviceDataConsumer')
 const DeviceUpdateAcceptedConsumer = require('./sqs/DeviceUpdateAcceptedConsumer')
+const rabbitmqConsumer = require('./sqs/rabbitmqConsumer')
 
+rabbitmqConsumer.startConsumer()
 if ((process.env.INSTALLER_QUEUE_QUEUE_URL_ENABLE == 'true' || process.env.INSTALLER_QUEUE_QUEUE_URL_ENABLE == true) && process.env.INSTALLER_QUEUE_URL) {
     const installerQueueConsumer = require('./sqs/InstallerQueueConsumer.js')
     installerQueueConsumer.startConsumer()
