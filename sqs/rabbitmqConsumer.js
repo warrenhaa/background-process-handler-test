@@ -69,14 +69,13 @@ async function consumeMessages() {
         let obj = JSON.parse(iotmsg)
         manageDeviceUpdateAccepted(obj).then(result => {
             console.log("RABBITMQ manageDeviceUpdateAccepted finish:"+iotmsg)
-            channel.ack(message);
         }).catch(async err => {
             if (err && err.message) {
                 console.log("RABBITMQ process error:"+err.message)
             }
         })}
     }, {
-      noAck: false // Important: Disable auto-acknowledgment
+      noAck: true // Important: Disable auto-acknowledgment
     });
 
     // Handle Connection Closure (Important)
