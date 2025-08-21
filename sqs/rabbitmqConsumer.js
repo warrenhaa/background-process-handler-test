@@ -103,7 +103,7 @@ async function consumeMessages() {
 
 var startConsumer = function () {
     console.log('RabbitMQ startConsumer');
-    //consumeMessages();
+    consumeMessages();
 }
 
 module.exports = {
