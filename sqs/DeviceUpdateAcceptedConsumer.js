@@ -66,7 +66,7 @@ const app = Consumer.create({
             }
         }
         if (!paused) {
-        // console.log("processed event", message.Body)
+        console.log("Warrenxia TEST processed event:"+message.Body)
         let obj = JSON.parse(message.Body)
         manageDeviceUpdateAccepted(obj).then(result => {
 
@@ -121,7 +121,7 @@ app.on('timeout_error', (err) => {
 });
 
 var startConsumer = function () {
-    //app.start();
+    app.start();
 }
 
 

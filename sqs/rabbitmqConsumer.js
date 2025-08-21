@@ -107,5 +107,5 @@ var startConsumer = function () {
 }
 
 module.exports = {
-    startConsumer
+    //startConsumer
 }
